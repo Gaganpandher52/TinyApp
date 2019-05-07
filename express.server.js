@@ -6,7 +6,7 @@ app.set("view engine", "ejs")
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "9sm5xK": "http://www.google.com",
 };
 
 app.get("/", (req, res) => {
@@ -18,17 +18,15 @@ app.get("/urls.json", (req, res) => {
   });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { greeting: 'Hello World!' };
-  res.render("urls_index", templateVars);
+    let templateVars = {URL: urlDatabase};
+    res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-    const shortURL = req.params.shortURL;
-    let templateVars = { shortURL: shortURL, longURL: urlDatabase[shortURL] };
+    const shortU = req.params.shortURL;
+    let templateVars = { shortURL: shortU, longURL: urlDatabase[shortU] };
     res.render("urls_show", templateVars);
   });
-
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
