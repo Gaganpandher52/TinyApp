@@ -22,9 +22,11 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+app.get("/urls/:shortURL", (req, res) => {
+    const shortURL = req.params.shortURL;
+    let templateVars = { shortURL: shortURL, longURL: urlDatabase[shortURL] };
+    res.render("urls_show", templateVars);
+  });
 
 
 app.listen(PORT, () => {
