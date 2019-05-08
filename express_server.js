@@ -11,18 +11,20 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com",
 };
 app.post("/urls", (req, res) => {
-    console.log(req.body);
-    let random = generateRandomString();
-    let longUrl = req.body.longURL;
-    urlDatabase[random] = longUrl;
-    console.log(urlDatabase);    // Log the POST request body to the console
-    res.redirect("/urls"); // Respond with 'Ok' (we will replace this)
+  console.log(req.body);
+  let random = generateRandomString();
+  let longUrl = req.body.longURL;
+  urlDatabase[random] = longUrl;
+  console.log(urlDatabase);   
+  res.redirect("/urls"); 
   });
 app.post("/urls/:shortURL/delete", (req, res) => {
-    
-    delete urlDatabase[req.params.shortURL];
-    //console.log(urlDatabase);    // Log the POST request body to the console
-    res.redirect("/urls"); // Respond with 'Ok' (we will replace this)
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls"); 
+  });
+
+app.post("/urls/:id", (req, res) => {
+  res.redirect("/urls"); 
   });
   
 app.get("/u/:shortURL", (req, res) => {
@@ -31,7 +33,7 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longUR);
 });
 app.get("/urls/new", (req, res) => {
-    res.render("urls_new");
+  res.render("urls_new");
   });
 
 app.get("/", (req, res) => {
@@ -39,18 +41,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/urls.json", (req, res) => {
-    res.json(urlDatabase);
+  res.json(urlDatabase);
   });
 
 app.get("/urls", (req, res) => {
-    let templateVars = {URL: urlDatabase};
-    res.render("urls_index", templateVars);
+  let templateVars = {URL: urlDatabase};
+  res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-    const shortU = req.params.shortURL;
-    let templateVars = { shortURL: shortU, longURL: urlDatabase[shortU] };
-    res.render("urls_show", templateVars);
+  const shortU = req.params.shortURL;
+  let templateVars = { shortURL: shortU, longURL: urlDatabase[shortU] };
+  res.render("urls_show", templateVars);
   });
 
 app.listen(PORT, () => {
