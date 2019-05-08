@@ -9,15 +9,21 @@
 <body style="font-size:20px; padding:50px;">
     <p><a href ="/urls/new">create a new tiny url</a></p>
     <h3> MyURLs :
-        <ul><% for(let i in URL){ %>
-            <li><%=i%> - <%=URL[i] %>
-                <form action="/urls/<%=i%>"><a href="#"><input type="submit" value="edit"></input></a></form>
+        <div>
+        <ol><% for(let i in URL){ %>
+            <li><%=i%> - <%=URL[i] %> </li>
+                <form action="/urls/<%=i%>">
+                    
+                    <button type="submit" value="Edit" class="btn btn-primary">Edit</button>
+                </form>
                 <form method="POST" action="/urls/<%=i%>/delete">
-                    <input type="submit" value="delete"></input>
-                </form></li>
+                    <button type="submit" value="delete" class="btn btn-primary">delete</button>
+                </form>
+            
+            
        <%}%>
-       
-    </ul>
+    </div>
+    </ol>
     </h3>
    
 </body>
