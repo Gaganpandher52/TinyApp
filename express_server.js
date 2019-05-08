@@ -23,7 +23,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   res.redirect("/urls"); 
   });
 
-app.post("/urls/:id", (req, res) => {
+app.post("/urls/:shortURL", (req, res) => {
+  let short = req.params.shortURL;
+  let long = req.body.longURL;
+  urlDatabase[short] = long;
   res.redirect("/urls"); 
   });
   

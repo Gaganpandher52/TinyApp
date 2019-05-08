@@ -11,10 +11,12 @@
     <h3> MyURLs :
         <ul><% for(let i in URL){ %>
             <li><%=i%> - <%=URL[i] %>
+                <form action="/urls/<%=i%>"><a href="#"><input type="submit" value="edit"></input></a></form>
                 <form method="POST" action="/urls/<%=i%>/delete">
                     <input type="submit" value="delete"></input>
                 </form></li>
        <%}%>
+       
     </ul>
     </h3>
    
