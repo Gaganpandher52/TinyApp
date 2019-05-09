@@ -8,10 +8,14 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs")
 const generateRandomString = () => Math.random().toString(36).substring(2, 8);
+
+//database stores all the shortUrls and longUrls
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
 };
+
+//this route geneates a random id for the user input url
 app.post("/urls", (req, res) => {
   console.log(req.body);
   let random = generateRandomString();
@@ -21,18 +25,20 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls"); 
   });
 
+//this route deletes the url from the database
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls"); 
   });
 
-  //handles the login 
+//this route handles the login of the user
 app.post("/login", (req, res) => {
   const stuff = req.body.username;
   res.cookie('username',stuff)
   res.redirect("/urls"); 
   });
-//handles the logout
+
+//this route handles the logout of the user and rediredts
 app.post("/logout", (req, res) => {
   //const stuff = req.body.username;
   res.clearCookie('username');
@@ -68,7 +74,6 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {URL: urlDatabase,
     username: req.cookies["username"],};
-  
   res.render("urls_index", templateVars);
 });
 
