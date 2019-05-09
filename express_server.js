@@ -75,7 +75,10 @@ app.post("/register", (req, res) => {
   const newId = generateRandomString();
   const newEmail = req.body.email;
   const newPassword = req.body.password;
-  if(users['userRandomID'].email === newEmail){
+  if(!newEmail || !newPassword){
+    res.send("status code 404.....");
+  }
+  else if(users['userRandomID'].email === newEmail){
     res.send("cannot register");
   }
   else{
@@ -93,9 +96,13 @@ app.get("/u/:shortURL", (req, res) => {
   const longUR = urlDatabase[shortLink];
   res.redirect(longUR);
 });
+
 app.get("/urls/new", (req, res) => {
+  const user_id = req.cookies["user_id"]
   let templateVars = {
-  user_id: req.cookies["email"]};
+    user_id: user_id,
+    email: users[user_id].email
+  };
   res.render("urls_new",templateVars);
   });
 
@@ -109,10 +116,13 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   
-  let templateVars = {URL: urlDatabase,
-    user_id: req.cookies["user_id"],
-    
-  }
+ 
+  const user_id = req.cookies["user_id"]
+  let templateVars = {
+    URL: urlDatabase,
+    user_id: user_id,
+    email: users[user_id].email
+  };
   res.render("urls_index", templateVars);
 });
 
