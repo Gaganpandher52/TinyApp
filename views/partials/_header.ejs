@@ -9,22 +9,21 @@
     
       <div class="form-group mb-2">
           
-        
-        <% if(username){%>
+
           <form class="form-inline" action="/logout" method="POST">
           
-            <label> Login as -> <u><%=username%></u></label>
+            <label> Login as -> <u><%=user_id%></u></label>
             <br></br>
               <button type="submit" class="btn btn-success">logout</button>
           </form>
 
-                  <%}else{%>
+                  
           <form class="form-inline" action="/login" method="POST">
             <label>Enter a username:</label>
-              <input class="form-control" name="username" type="text" placeholder="@username" style="width: 300px; margin: 1em">
+              <input class="form-control" name="email" type="text" placeholder="@username" style="width: 300px; margin: 1em">
               <button type="submit" class="btn btn-success">login</button>
           </form>
-        <%}%>
+        
 
 
       </div>
