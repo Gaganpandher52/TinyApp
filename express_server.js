@@ -14,6 +14,19 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
 };
+//this objects store username and passwords
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+};
 
 //this route geneates a random id for the user input url
 app.post("/urls", (req, res) => {
@@ -51,7 +64,21 @@ app.post("/urls/:shortURL", (req, res) => {
   urlDatabase[short] = long;
   res.redirect("/urls"); 
   });
-  
+
+//this route for registration page
+app.get("/register", (req, res) => {
+  res.render("urls_registration");
+});
+
+app.post("/register", (req, res) => {
+  let id = generateRandomString();
+  let email = req.body.email;
+  let password = req.body.password;
+  urlDatabase[id] = {email,password};
+  res.redirect("/urls"); 
+  });
+
+
 app.get("/u/:shortURL", (req, res) => {
   const shortLink = req.params.shortURL;
   const longUR = urlDatabase[shortLink];
