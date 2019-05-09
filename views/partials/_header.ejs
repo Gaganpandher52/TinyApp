@@ -12,7 +12,7 @@
         
         <% if(username){%>
           <form class="form-inline" action="/logout" method="POST">
-            <label>Enter a username:</label>
+          
             <label> Login as -> <%=username%></label>
             <br></br>
               <button type="submit" class="btn btn-success">logout</button>
@@ -20,6 +20,7 @@
 
                   <%}else{%>
           <form class="form-inline" action="/login" method="POST">
+            <label>Enter a username:</label>
               <input class="form-control" name="username" type="text" placeholder="@username" style="width: 300px; margin: 1em">
               <button type="submit" class="btn btn-success">login</button>
           </form>
