@@ -70,12 +70,14 @@ app.get("/register", (req, res) => {
   res.render("urls_registration");
 });
 
+//this route saves the user made id to the users object
 app.post("/register", (req, res) => {
-  let id = generateRandomString();
-  let email = req.body.email;
-  let password = req.body.password;
-  urlDatabase[id] = {email,password};
-  res.redirect("/urls"); 
+  console.log(req.body);
+  const newId = generateRandomString();
+  const newEmail = req.body.email;
+  const newPassword = req.body.password;
+  users[newId] = {id :newId,email : newEmail,password : newPassword};
+  console.log(users);
   });
 
 
