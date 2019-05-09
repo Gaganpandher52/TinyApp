@@ -20,8 +20,16 @@ app.post("/urls", (req, res) => {
   console.log(urlDatabase);   
   res.redirect("/urls"); 
   });
+
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls"); 
+  });
+
+  //handles the login 
+app.post("/login", (req, res) => {
+  const stuff = req.body.username;
+  res.cookie('username',stuff)
   res.redirect("/urls"); 
   });
 
@@ -51,6 +59,7 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = {URL: urlDatabase};
+  
   res.render("urls_index", templateVars);
 });
 
