@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
 <body style="font-size:20px; padding:50px;">
+        
     <p><a href ="/urls/new">create a new tiny url</a></p>
     <h3> MyURLs :
         <div>
         <ol><% for(let i in URL){ %>
-            <li><%=i%> - <%=URL[i] %> </li>
+            <li><%=i%> - <%=URL[i] %></li>
             <div class="btn-group">
                 <form action="/urls/<%=i%>">
                     
