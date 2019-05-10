@@ -45,23 +45,41 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   });
 
 app.post("/login", (req, res) => {
+  
   const newEmail = req.body.email;
   const newPassword = req.body.password;
-  let go = false;
-  for(i in users){
-    if(users[i].email === newEmail && users[i].password === newPassword){
-      go = true;
-      res.cookie('user_id');//cookie working stores id
-      return res.redirect('/urls');
+  const userID = find(newEmail);
+
+  function find(newEmail){
+    for (const i in users) {
+      if (newEmail === users[i].email) {
+        return i;
+        
+      }
     }
-    else{
-      return res.send('ENTER CORRECT EMAIL AND PASSWORD CONNECTION ERROR 403');
-    }
-  }//for
-  if(!newEmail || !newPassword){
-    return res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
-  
+  if(!userID){
+    res.send("PLEASE ENTER EMAIL AND PASSWORD");
+  }
+  else if(newPassword !== users[userID].password){
+    res.send("PLEASE ENTER EMAIL AND PASSWORD");
+  }
+  else{
+    res.cookie('user_id',users[userID].id);
+    res.redirect('/urls');
+  }
+  // if(!newEmail || !newPassword){
+  //   return res.send("PLEASE ENTER EMAIL AND PASSWORD");
+  // }  
+  // for(i in users){
+  //   if(users[i].email === newEmail && users[i].password === newPassword){
+  //     res.cookie('user_id',i);//cookie working stores id
+  //     return res.redirect('/urls');
+  //   }
+  //   else{
+  //     return res.send('ENTER CORRECT EMAIL AND PASSWORD CONNECTION ERROR 403');
+  //   }
+  // }//for
   });
 
 app.get("/login", (req, res) => {
@@ -117,10 +135,11 @@ app.post("/register", (req, res) => {
   else if(exit){
     return res.send("CONNECTION STATUS 403")
   }
-  users[newId] = {id :newId, email : newEmail, password : newPassword};
+  //users[newId] = {id :newId, email : newEmail, password : newPassword};
   res.cookie('user_id',newId);//cookie working stores id
   res.redirect('/urls');
-      console.log(users);
+  users[newId] = {id :newId, email : newEmail, password : newPassword};
+  console.log(users);
   });
 
 app.get("/u/:shortURL", (req, res) => {
