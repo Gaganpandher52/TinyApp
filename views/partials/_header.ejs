@@ -9,20 +9,21 @@
     
       <div class="form-group mb-2">
           
-
           <form class="form-inline" action="/logout" method="POST">
           
-            <label> Login as -> <u><%= email%></u></label>
+            <label> Login as -> <u><%=email%></u></label>
             <br></br>
               <button type="submit" class="btn btn-success">logout</button>
+          
+          
           </form>
-
-                  
           <form class="form-inline" action="/login" method="POST">
             <label>Enter a username:</label>
               <input class="form-control" name="email" type="text" placeholder="@username" style="width: 300px; margin: 1em">
+              <input class="form-control" name="password" type="text" placeholder="@username" style="width: 300px; margin: 1em">
               <button type="submit" class="btn btn-success">login</button>
           </form>
+        
         
 
 

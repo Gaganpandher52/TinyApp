@@ -45,16 +45,19 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   });
 
 //this route handles the login of the user
-app.post("/login", (req, res) => {
-  const stuff = req.body.username;
-  res.cookie('new_id',stuff)
-  res.redirect("/urls"); 
+// app.post("/login", (req, res) => {
+//   res.cookie('new_id',new_id)
+//   res.redirect("/urls"); 
+//   });
+app.get("/login", (req, res) => {
+  //res.cookie('new_id',new_id)
+  res.render("urls_login"); 
   });
 
 //this route handles the logout of the user and rediredts
 app.post("/logout", (req, res) => {
   res.clearCookie('user_id');
-  res.redirect("/urls"); 
+  res.redirect("urls"); 
   });
 
 app.post("/urls/:shortURL", (req, res) => {
@@ -71,23 +74,27 @@ app.get("/register", (req, res) => {
 
 //this route saves the user made id to the users object
 app.post("/register", (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const newId = generateRandomString();
   const newEmail = req.body.email;
   const newPassword = req.body.password;
+  let exit = false;
+  for(i in users){
+    if(users[i].email === newEmail){
+      exit = true;
+    }
+  }//for
   if(!newEmail || !newPassword){
-    res.send("status code 404.....");
+    return res.send("PLEASE ENTER EMAIL AND PASSWORD");
+    //res.redirect("/register")
   }
-  else if(users['userRandomID'].email === newEmail){
-    res.send("cannot register");
+  else if(exit){
+    return res.send("CONNECTION STATUS 404")
   }
-  else{
+  
   users[newId] = {id :newId, email : newEmail, password : newPassword};
   res.cookie('user_id',newId);//cookie working
   res.redirect('/urls');
-  
-  //console.log(users);
-      }
       console.log(users);
   });
 
@@ -115,8 +122,6 @@ app.get("/urls.json", (req, res) => {
   });
 
 app.get("/urls", (req, res) => {
-  
- 
   const user_id = req.cookies["user_id"]
   let templateVars = {
     URL: urlDatabase,
