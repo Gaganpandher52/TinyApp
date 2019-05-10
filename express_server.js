@@ -44,20 +44,26 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   res.redirect("/urls"); 
   });
 
-//this route handles the login of the user
-// app.post("/login", (req, res) => {
-//   res.cookie('new_id',new_id)
-//   res.redirect("/urls"); 
-//   });
+app.post("/login", (req, res) => {
+
+  
+  });
+
 app.get("/login", (req, res) => {
+  const user_id = req.cookies["user_id"]
+  let templateVars = {
+    URL: urlDatabase,
+    user_id: user_id,
+    email: users[user_id] && users[user_id].email || null
+  };
   //res.cookie('new_id',new_id)
-  res.render("urls_login"); 
+  res.render("urls_login",templateVars); 
   });
 
 //this route handles the logout of the user and rediredts
 app.post("/logout", (req, res) => {
   res.clearCookie('user_id');
-  res.redirect("urls"); 
+  res.redirect("/login"); 
   });
 
 app.post("/urls/:shortURL", (req, res) => {
@@ -69,7 +75,12 @@ app.post("/urls/:shortURL", (req, res) => {
 
 //this route for registration page
 app.get("/register", (req, res) => {
-  res.render("urls_registration");
+  const user_id = req.cookies["user_id"];
+  let templateVars = {
+    user_id: user_id,
+    //email: users[user_id].email
+  };
+  res.render("urls_registration",templateVars);
 });
 
 //this route saves the user made id to the users object
@@ -91,9 +102,8 @@ app.post("/register", (req, res) => {
   else if(exit){
     return res.send("CONNECTION STATUS 404")
   }
-  
   users[newId] = {id :newId, email : newEmail, password : newPassword};
-  res.cookie('user_id',newId);//cookie working
+  res.cookie('user_id',newId);//cookie working stores id
   res.redirect('/urls');
       console.log(users);
   });
@@ -105,7 +115,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const user_id = req.cookies["user_id"]
+  const user_id = req.cookies["user_id"];
   let templateVars = {
     user_id: user_id,
     email: users[user_id].email
@@ -126,7 +136,7 @@ app.get("/urls", (req, res) => {
   let templateVars = {
     URL: urlDatabase,
     user_id: user_id,
-    email: users[user_id].email
+    email: users[user_id].email || null
   };
   res.render("urls_index", templateVars);
 });
