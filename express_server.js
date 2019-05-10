@@ -55,16 +55,13 @@ app.post("/login", (req, res) => {
       return res.redirect('/urls');
     }
     else{
-      return res.send('ENTER CORRECT EMAIL AND PASSWORD CONNECTION ERROR 404');
+      return res.send('ENTER CORRECT EMAIL AND PASSWORD CONNECTION ERROR 403');
     }
   }//for
   if(!newEmail || !newPassword){
     return res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
   
-    // res.cookie('user_id');//cookie working stores id
-    // res.redirect('/urls');
-
   });
 
 app.get("/login", (req, res) => {
@@ -72,7 +69,7 @@ app.get("/login", (req, res) => {
   let templateVars = {
     URL: urlDatabase,
     user_id: user_id,
-    email: users[user_id] && users[user_id].email || null
+    email: users[user_id] 
   };
   //res.cookie('new_id',new_id)
   res.render("urls_login",templateVars); 
@@ -118,7 +115,7 @@ app.post("/register", (req, res) => {
     //res.redirect("/register")
   }
   else if(exit){
-    return res.send("CONNECTION STATUS 404")
+    return res.send("CONNECTION STATUS 403")
   }
   users[newId] = {id :newId, email : newEmail, password : newPassword};
   res.cookie('user_id',newId);//cookie working stores id
@@ -161,6 +158,7 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const shortU = req.params.shortURL;
+  const user_id = req.cookies["user_id"];
   let templateVars = { shortURL: shortU, 
     longURL: urlDatabase[shortU], 
     user_id: req.cookies["user_id"],
