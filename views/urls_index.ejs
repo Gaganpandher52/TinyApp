@@ -8,6 +8,9 @@
 </head>
 <body style="font-size:20px; padding:50px;">
         <label>Login as 🔌 <%= email %></label>
+        <%if(!user_id){%>
+            <label class="bg-dark text-light">Please sign in </label>
+            <%}%>
         <form class="form-inline" action="/logout" method="POST">
             <button type="submit" class="btn btn-success">logout</button>
             <br></br>
@@ -16,8 +19,9 @@
     <h3> MyURLs :
         <div>
         <ol><% for(let i in URL){ %>
-            <li><%=i%> - <%=URL[i] %></li>
-            
+           
+            <li><%=i%> - <%=URL[i].longURL %></li>
+           
             <div class="btn-group">
                 <form action="/urls/<%=i%>">
                     

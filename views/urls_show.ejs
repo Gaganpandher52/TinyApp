@@ -12,7 +12,6 @@
     <!-- Add EJS code here -->
     <% include ./partials/_header.ejs %>
     <label>Login as 🔌  <%= email %></label>
-    <p><a href ="#">create a new tiny url</a></p>
     <h3>Tiny URL for <%= longURL%></h3>
     <h3><%=shortURL%></h3>
     <form class="form-inline" action="/urls/<%=shortURL%>" method="POST">
