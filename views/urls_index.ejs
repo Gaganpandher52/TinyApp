@@ -8,6 +8,10 @@
 </head>
 <body style="font-size:20px; padding:50px;">
         <label>Login as <%= email %></label>
+        <form class="form-inline" action="/logout" method="POST">
+            <button type="submit" class="btn btn-success">logout</button>
+            <br></br>
+          </form>
     <p><a href ="/urls/new">create a new tiny url</a></p>
     <h3> MyURLs :
         <div>

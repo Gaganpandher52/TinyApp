@@ -51,14 +51,19 @@ app.post("/login", (req, res) => {
   for(i in users){
     if(users[i].email === newEmail && users[i].password === newPassword){
       go = true;
+      res.cookie('user_id');//cookie working stores id
+      return res.redirect('/urls');
+    }
+    else{
+      return res.send('ENTER CORRECT EMAIL AND PASSWORD CONNECTION ERROR 404');
     }
   }//for
   if(!newEmail || !newPassword){
     return res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
   
-    res.cookie('user_id');//cookie working stores id
-    res.redirect('/urls');
+    // res.cookie('user_id');//cookie working stores id
+    // res.redirect('/urls');
 
   });
 
@@ -149,14 +154,17 @@ app.get("/urls", (req, res) => {
   let templateVars = {
     URL: urlDatabase,
     user_id: user_id,
-    email: users[user_id].email || null
+    email: users[user_id] && users[user_id].email || null
   };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
   const shortU = req.params.shortURL;
-  let templateVars = { shortURL: shortU, longURL: urlDatabase[shortU], user_id: req.cookies["user_id"] };
+  let templateVars = { shortURL: shortU, 
+    longURL: urlDatabase[shortU], 
+    user_id: req.cookies["user_id"],
+    email: users[user_id] && users[user_id].email || null };
   res.render("urls_show", templateVars);
   });
 

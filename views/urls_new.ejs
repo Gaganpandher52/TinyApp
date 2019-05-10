@@ -16,6 +16,10 @@
 
     <h4>Create TinyURL</h4>
     <label>logged in as <%= email %></label>
+    <form class="form-inline" action="/logout" method="POST">
+        <button type="submit" class="btn btn-success">logout</button>
+        <br></br>
+      </form>
     <form class="form-inline" action="/urls" method="POST">
       <div class="form-group mb-2">
         <label for="longURL">Enter a URL:</label>
