@@ -174,12 +174,12 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const user_id = req.cookies.user_id;
-  const n = urlForUsers(user_id);
+  const idForUser = urlForUsers(user_id);
   let templateVars = {
     //URL: urlDatabase,
     user_id: user_id,
     email: users[user_id] && users[user_id].email || null,
-    n: n
+    idFor: idForUser
   };
   res.render("urls_index", templateVars);
 });
