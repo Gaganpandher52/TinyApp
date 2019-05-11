@@ -18,9 +18,9 @@
     <p><a href ="/urls/new">create a new tiny url</a></p>
     <h3> MyURLs :
         <div>
-        <ol><% for(let i in URL){ %>
+        <ol><% for(let i in n){ %>
            
-            <li><%=i%> - <%=URL[i].longURL %></li>
+            <li><%=i%> - <%=n[i] %></li>
            
             <div class="btn-group">
                 <form action="/urls/<%=i%>">

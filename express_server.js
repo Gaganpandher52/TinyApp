@@ -11,8 +11,10 @@ const generateRandomString = () => Math.random().toString(36).substring(2, 8);
 
 //database stores all the shortUrls and longUrls
 const urlDatabase = {
-  "b2xVn2": {longURL:"http://www.lighthouselabs.ca",userID:'user1'},
-  "9sm5xK": {longURL:"http://www.google.com",userID:'user1'}
+  "b2xVn2": {longURL:"http://www.lighthouselabs.ca",userID:'userRandomID'},
+  "9sm5xK": {longURL:"http://www.google.com",userID:'userRandomID'},
+  "8am5xK": {longURL:"http://www.google.com",userID:'userRandomID'},
+  "7bm5xK": {longURL:"http://www.google.com",userID:'userRandomID'}
 };
 //this objects store username and passwords
 const users = { 
@@ -171,11 +173,13 @@ app.get("/urls.json", (req, res) => {
   });
 
 app.get("/urls", (req, res) => {
-  const user_id = req.cookies["user_id"];
+  const user_id = req.cookies.user_id;
+  const n = urlForUsers(user_id);
   let templateVars = {
-    URL: urlDatabase,
+    //URL: urlDatabase,
     user_id: user_id,
-    email: users[user_id] && users[user_id].email || null
+    email: users[user_id] && users[user_id].email || null,
+    n: n
   };
   res.render("urls_index", templateVars);
 });
@@ -193,5 +197,26 @@ app.get("/urls/:shortURL", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+function urlForUsers(id){
+  let empty = {};
+  for(let i in urlDatabase){
+    if(id === urlDatabase[i].userID){
+      empty[i] = urlDatabase[i];
+    }
+  }  
+  return empty;
+}
+
+// function urlsForUser(userID){
+//   let userURLs = {};
+//   for (let urlId in urlDatabase){
+//     let url = urlDatabase[urlId];
+//     if (url.userID === userID){
+//       userURLs[urlId] = url;
+//     }
+//   }
+//   return userURLs;
+//  }
 
 
