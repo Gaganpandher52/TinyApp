@@ -4,6 +4,7 @@ var app = express();
 var PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs")
@@ -56,10 +57,13 @@ app.post("/login", (req, res) => {
   
   const newEmail = req.body.email;
   const newPassword = req.body.password;
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
   const userID = find(newEmail);
 
   function find(newEmail){
     for (const i in users) {
+      //bcrypt.compareSync(hashedPassword, users[userID].password);
+      
       if (newEmail === users[i].email) {
         return i;
       }
@@ -68,7 +72,7 @@ app.post("/login", (req, res) => {
   if(!userID){
     res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
-  else if(newPassword !== users[userID].password){
+  else if(bcrypt.compareSync(hashedPassword, users[userID].password)){
     res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
   else{
@@ -129,6 +133,7 @@ app.post("/register", (req, res) => {
   const newId = generateRandomString();
   const newEmail = req.body.email;
   const newPassword = req.body.password;
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
   let exit = false;
   for(i in users){
     if(users[i].email === newEmail){
@@ -145,7 +150,7 @@ app.post("/register", (req, res) => {
   //users[newId] = {id :newId, email : newEmail, password : newPassword};
   res.cookie('user_id',newId);//cookie working stores id
   res.redirect('/urls');
-  users[newId] = {id :newId, email : newEmail, password : newPassword};
+  users[newId] = {id :newId, email : newEmail, password : hashedPassword};
   console.log(users);
   });
 
