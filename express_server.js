@@ -12,18 +12,20 @@ app.set("view engine", "ejs")
 app.use(cookieSession({
   name: 'session',
   keys: ["key1"],
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  maxAge: 24 * 60 * 60 * 1000 
 }));
+
 //this function return a 6 chars long random string
 const generateRandomString = () => Math.random().toString(36).substring(2, 8);
 
-//database stores all the shortUrls and longUrls
+//database stores all the shortUrls and longUrls and userID
 const urlDatabase = {
   "b2xVn2": {longURL:"http://www.lighthouselabs.ca",userID:'userRandomID'},
   "9sm5xK": {longURL:"http://www.google.com",userID:'userRandomID'},
   "8am5xK": {longURL:"http://www.google.com",userID:'userRandomID'},
   "7bm5xK": {longURL:"http://www.google.com",userID:'userRandomID'}
 };
+
 //this objects store username and passwords
 const users = { 
   "userRandomID": {
@@ -37,6 +39,7 @@ const users = {
     password: "dishwasher-funk"
   }
 };
+
 //this route geneates a random id for the user input url
 app.post("/urls", (req, res) => {
   console.log(req.body);
@@ -50,13 +53,14 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls"); 
   }
   console.log(urlDatabase);   
-  //res.redirect("/urls"); 
   });
+
 //this route deletes the url from the database
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls"); 
   });
+
 //this route handles the login logic
 app.post("/login", (req, res) => {
   const newEmail = req.body.email;
@@ -81,6 +85,7 @@ app.post("/login", (req, res) => {
     res.redirect('/urls');
   }
   });
+
 //this route renders the login page 
 app.get("/login", (req, res) => {
   const user_id = req.session["user_id"]
@@ -97,6 +102,7 @@ app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/login"); 
   });
+
 // this route handles the new urls
 app.post("/urls/:shortURL", (req, res) => {
   let short = req.params.shortURL;
@@ -162,6 +168,7 @@ app.get("/", (req, res) => {
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
   });
+
 //this route render the main urls page
 app.get("/urls", (req, res) => {
   const user_id = req.session.user_id;
@@ -173,6 +180,7 @@ app.get("/urls", (req, res) => {
   };
   res.render("urls_index", templateVars);
 });
+
 // this route render the update url page
 app.get("/urls/:shortURL", (req, res) => {
   const shortU = req.params.shortURL;
