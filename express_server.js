@@ -122,7 +122,7 @@ app.post("/urls/:shortURL", (req, res) => {
   const long = req.body.longURL;
   urlDatabase[short].longURL = long;
   console.log(urlDatabase);
-  res.redirect("/urls/"); 
+  res.redirect("/urls"); 
   });
 
 //this route for registration page
