@@ -59,6 +59,7 @@ const users = {
   }
 };
 
+//all POST routes
 //this route geneates a random id for the user input url
 app.post("/urls", (req, res) => {
   console.log(req.body);
@@ -98,17 +99,6 @@ app.post("/login", (req, res) => {
   }
   });
 
-//this route renders the login page 
-app.get("/login", (req, res) => {
-  const user_id = req.session["user_id"]
-  let templateVars = {
-    URL: urlDatabase,
-    user_id: user_id,
-    email: users[user_id] 
-  };
-  res.render("urls_login",templateVars); 
-  });
-
 //this route handles the logout of the user and rediredts
 app.post("/logout", (req, res) => {
   req.session = null;
@@ -124,16 +114,6 @@ app.post("/urls/:shortURL", (req, res) => {
   console.log(urlDatabase);
   res.redirect("/urls"); 
   });
-
-//this route for registration page
-app.get("/register", (req, res) => {
-  const user_id = req.session.user_id;
-  let templateVars = {
-    user_id: user_id,
-    email: users[user_id] && users[user_id].email || null
-  };
-  res.render("urls_registration",templateVars);
-});
 
 //this route saves the user made id to the users object
 app.post("/register", (req, res) => {
@@ -160,11 +140,33 @@ app.post("/register", (req, res) => {
   console.log(users);
   });
 
+//all GET routes
+//this route for registration page
+app.get("/register", (req, res) => {
+  const user_id = req.session.user_id;
+  let templateVars = {
+    user_id: user_id,
+    email: users[user_id] && users[user_id].email || null
+  };
+  res.render("urls_registration",templateVars);
+});
+
 app.get("/u/:shortURL", (req, res) => {
   const shortLink = req.params.shortURL;
   const longUR = urlDatabase[shortLink];
   res.redirect(longUR);
 });
+
+//this route renders the login page 
+app.get("/login", (req, res) => {
+  const user_id = req.session["user_id"]
+  let templateVars = {
+    URL: urlDatabase,
+    user_id: user_id,
+    email: users[user_id] 
+  };
+  res.render("urls_login",templateVars); 
+  });
 
 app.get("/urls/new", (req, res) => {
   const user_id = req.session.user_id;
