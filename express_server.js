@@ -1,7 +1,7 @@
 //npm modules
 const express = require("express");
 const app = express();
-const PORT = 8080; // default port 8080
+const PORT = 5000; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
@@ -17,6 +17,25 @@ app.use(cookieSession({
 
 //this function return a 6 chars long random string
 const generateRandomString = () => Math.random().toString(36).substring(2, 8);
+//helper method helps with finding email
+function find(newEmail){
+  for (const i in users) {
+    if (newEmail === users[i].email) {
+      return i;
+    }
+  }
+}
+//this function return login users own links
+function urlForUsers(id){
+  let empty = {};
+  for(let i in urlDatabase){
+    if(id === urlDatabase[i].userID){
+      empty[i] = urlDatabase[i];
+    }
+  }  
+  return empty;
+}
+
 
 //database stores all the shortUrls and longUrls and userID
 const urlDatabase = {
@@ -46,11 +65,11 @@ app.post("/urls", (req, res) => {
   const user_id = req.session["user_id"];// new added
   let random = generateRandomString();
   let longUrl = req.body.longURL;
-  if(!user_id){
-    return res.send('Please sign in to create urls');
+  if(user_id === null){
+    return res.redirect("/register");
   }else{
   urlDatabase[random] = {longURL:longUrl,userID:user_id};
-  res.redirect("/urls"); 
+  return res.redirect("/urls"); 
   }
   console.log(urlDatabase);   
   });
@@ -67,13 +86,6 @@ app.post("/login", (req, res) => {
   const newPassword = bcrypt.hashSync(req.body.password, 10);
   const userID = find(newEmail);
 
-  function find(newEmail){
-    for (const i in users) {
-      if (newEmail === users[i].email) {
-        return i;
-      }
-    }
-  }
   if(!userID){
     res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
@@ -105,10 +117,12 @@ app.post("/logout", (req, res) => {
 
 // this route handles the new urls
 app.post("/urls/:shortURL", (req, res) => {
-  let short = req.params.shortURL;
-  let long = req.body.longURL;
-  urlDatabase[short] = long;
-  res.redirect("/urls"); 
+  const short = req.params.shortURL;
+  console.log("short",short);
+  const long = req.body.longURL;
+  urlDatabase[short].longURL = long;
+  console.log(urlDatabase);
+  res.redirect("/urls/"); 
   });
 
 //this route for registration page
@@ -162,7 +176,7 @@ app.get("/urls/new", (req, res) => {
   });
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+    return res.redirect("/register");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -188,7 +202,7 @@ app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: shortU,
     longURL: urlDatabase[shortU].longURL,
     user_id: req.session.user_id,
-    email: users[user_id] && users[user_id].email || null };
+    email: users[user_id] && users[user_id].email || null};
   res.render("urls_show", templateVars);
   });
 
@@ -196,16 +210,6 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-//this function return login users own links
-function urlForUsers(id){
-  let empty = {};
-  for(let i in urlDatabase){
-    if(id === urlDatabase[i].userID){
-      empty[i] = urlDatabase[i];
-    }
-  }  
-  return empty;
-}
 
 
 

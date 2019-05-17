@@ -23,13 +23,14 @@
             <li><%=i%> - <%=idFor[i].longURL %></li>
            
             <div class="btn-group">
-                <form action="/urls/<%=i%>/">
+                <form method="GET" action="/urls/<%=i%>/">
                     
                     <button type="submit" value="Edit" class="btn btn-warning btn-md">Edit</button>
                 </form>
                 <form method="POST" action="/urls/<%=i%>/delete">
                     <button type="submit" value="delete" class="btn btn-danger btn-md">delete</button>
                 </form>
+                
             </div>
             
             
