@@ -66,13 +66,12 @@ app.post("/urls", (req, res) => {
   const user_id = req.session["user_id"];// new added
   let random = generateRandomString();
   let longUrl = req.body.longURL;
-  if(user_id === null){
+  if(!user_id){
     return res.redirect("/register");
   }else{
   urlDatabase[random] = {longURL:longUrl,userID:user_id};
   return res.redirect("/urls"); 
-  }
-  console.log(urlDatabase);   
+  } 
   });
 
 //this route deletes the url from the database
