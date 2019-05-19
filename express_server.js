@@ -83,14 +83,14 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 //this route handles the login logic
 app.post("/login", (req, res) => {
   const newEmail = req.body.email;
-  const newPassword = bcrypt.hashSync(req.body.password, 10);
+  const newPassword = req.body.password;
   const userID = find(newEmail);
 
   if(!userID){
     res.send("PLEASE ENTER EMAIL AND PASSWORD");
   }
-  else if(bcrypt.compareSync(newPassword, users[userID].password)){
-    res.send("PLEASE ENTER EMAIL AND PASSWORD");
+  else if(!bcrypt.compareSync(newPassword, users[userID].password)){
+    res.send("PLEASE ENTER THE CORRECT PASSWORD");
   }
   else{
     req.session.user_id = userID;
