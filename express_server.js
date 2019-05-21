@@ -1,7 +1,7 @@
 //npm modules
 const express = require("express");
 const app = express();
-const PORT = 5000; // default port 8080
+const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
@@ -66,12 +66,9 @@ app.post("/urls", (req, res) => {
   const user_id = req.session["user_id"];// new added
   let random = generateRandomString();
   let longUrl = req.body.longURL;
-  if(!user_id){
-    return res.redirect("/register");
-  }else{
   urlDatabase[random] = {longURL:longUrl,userID:user_id};
-  return res.redirect("/urls"); 
-  } 
+  res.redirect("/urls"); 
+  
   });
 
 //this route deletes the url from the database
@@ -100,7 +97,7 @@ app.post("/login", (req, res) => {
 
 //this route handles the logout of the user and rediredts
 app.post("/logout", (req, res) => {
-  req.session = null;
+  req.session.user_id = null;
   res.redirect("/login"); 
   });
 
@@ -152,7 +149,7 @@ app.get("/register", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   const shortLink = req.params.shortURL;
-  const longUR = urlDatabase[shortLink];
+  const longUR = urlDatabase[shortLink].longURL;
   res.redirect(longUR);
 });
 
@@ -173,7 +170,12 @@ app.get("/urls/new", (req, res) => {
     user_id: user_id,
     email: users[user_id] && users[user_id].email || null 
   };
-  res.render("urls_new",templateVars);
+  //redirect to register if not logged in
+  if(user_id){
+    res.render("urls_new",templateVars);
+    }else{
+      res.redirect("/register");
+    }
   });
 
 app.get("/", (req, res) => {
@@ -193,13 +195,17 @@ app.get("/urls", (req, res) => {
     email: users[user_id] && users[user_id].email || null,
     idFor: idForUser
   };
+  if(user_id){
   res.render("urls_index", templateVars);
+  }else{
+    res.redirect("/register");
+  }
 });
 
 // this route render the update url page
 app.get("/urls/:shortURL", (req, res) => {
   const shortU = req.params.shortURL;
-  const user_id = req.session.user_id;
+  const user_id = req.session["user_id"];
   let templateVars = { shortURL: shortU,
     longURL: urlDatabase[shortU].longURL,
     user_id: req.session.user_id,

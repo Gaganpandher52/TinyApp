@@ -14,6 +14,15 @@
     <label>Login as 🔌  <%= email %></label>
     <h3>Tiny URL for <%= longURL%></h3>
     <h3><%=shortURL%></h3>
+    <form class="form-inline" action="/urls/" method="GET">
+      <button type="submit" class="btn btn-success">Back</button>
+      <br></br>
+    </form>
+    <form class="form-inline" action="/logout" method="POST">
+      <button type="submit" class="btn btn-success">logout</button>
+      <br></br>
+    </form>
+
     <form class="form-inline" action="/urls/<%=shortURL%>" method="POST">
         <div class="form-group mb-2">
           <label for="longURL">Update the URL:</label>
