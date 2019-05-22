@@ -150,7 +150,7 @@ app.get("/register", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   const shortLink = req.params.shortURL;
   if(!urlDatabase[shortLink]){
-    return res.send('The url does not exists');
+    return res.send('The url does not exist');
   }else{
     const longUR = urlDatabase[shortLink].longURL;
     res.redirect(longUR);
@@ -178,7 +178,7 @@ app.get("/urls/new", (req, res) => {
   if(user_id){
     res.render("urls_new",templateVars);
     }else{
-      res.redirect("/register");
+      res.send("Please login or register to gain access");
     }
   });
 
@@ -218,7 +218,7 @@ app.get("/urls/:shortURL", (req, res) => {
     if(user_id){
       res.render("urls_show", templateVars);
       }else{
-        res.redirect("/register");
+        res.send("Please login or register to gain access");
       }
   
 });
