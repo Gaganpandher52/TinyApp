@@ -12,7 +12,7 @@ app.set("view engine", "ejs")
 app.use(cookieSession({
   name: 'session',
   keys: ["key1"],
-  maxAge: 24 * 60 * 60 * 1000 
+  
 }));
 
 //this function return a 6 chars long random string
@@ -149,8 +149,12 @@ app.get("/register", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   const shortLink = req.params.shortURL;
-  const longUR = urlDatabase[shortLink].longURL;
-  res.redirect(longUR);
+  if(!urlDatabase[shortLink]){
+    return res.send('The url does not exists');
+  }else{
+    const longUR = urlDatabase[shortLink].longURL;
+    res.redirect(longUR);
+  }
 });
 
 //this route renders the login page 
@@ -205,12 +209,18 @@ app.get("/urls", (req, res) => {
 // this route render the update url page
 app.get("/urls/:shortURL", (req, res) => {
   const shortU = req.params.shortURL;
+  const url = urlDatabase[shortU].longURL;
   const user_id = req.session["user_id"];
   let templateVars = { shortURL: shortU,
-    longURL: urlDatabase[shortU].longURL,
+    longURL: url,
     user_id: req.session.user_id,
     email: users[user_id] && users[user_id].email || null};
-  res.render("urls_show", templateVars);
+    if(user_id){
+      res.render("urls_show", templateVars);
+      }else{
+        res.redirect("/register");
+      }
+
   });
 
 app.listen(PORT, () => {
