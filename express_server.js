@@ -63,7 +63,7 @@ const users = {
 //this route geneates a random id for the user input url
 app.post("/urls", (req, res) => {
   console.log(req.body);
-  const user_id = req.session["user_id"];// new added
+  const user_id = req.session.user_id;// new added
   let random = generateRandomString();
   let longUrl = req.body.longURL;
   urlDatabase[random] = {longURL:longUrl,userID:user_id};
@@ -97,7 +97,7 @@ app.post("/login", (req, res) => {
 
 //this route handles the logout of the user and rediredts
 app.post("/logout", (req, res) => {
-  req.session.user_id = null;
+  req.session = null;
   res.redirect("/login"); 
   });
 
@@ -139,7 +139,7 @@ app.post("/register", (req, res) => {
 //all GET routes
 //this route for registration page
 app.get("/register", (req, res) => {
-  const user_id = req.session.user_id;
+  const user_id = null;
   let templateVars = {
     user_id: user_id,
     email: users[user_id] && users[user_id].email || null
@@ -159,7 +159,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 //this route renders the login page 
 app.get("/login", (req, res) => {
-  const user_id = req.session["user_id"]
+  const user_id = null;
   let templateVars = {
     URL: urlDatabase,
     user_id: user_id,
@@ -202,7 +202,7 @@ app.get("/urls", (req, res) => {
   if(user_id){
   res.render("urls_index", templateVars);
   }else{
-    res.redirect("/register");
+    res.send("Please login or register to gain access");
   }
 });
 
@@ -210,7 +210,7 @@ app.get("/urls", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const shortU = req.params.shortURL;
   const url = urlDatabase[shortU].longURL;
-  const user_id = req.session["user_id"];
+  const user_id = req.session.user_id;
   let templateVars = { shortURL: shortU,
     longURL: url,
     user_id: req.session.user_id,
@@ -220,8 +220,10 @@ app.get("/urls/:shortURL", (req, res) => {
       }else{
         res.redirect("/register");
       }
+  
+});
 
-  });
+  
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
