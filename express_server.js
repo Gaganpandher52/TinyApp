@@ -22,7 +22,7 @@ function find(newEmail){
   for (const i in users) {
     if (newEmail === users[i].email) {
       return i;
-    }
+    } 
   }
 }
 //this function return login users own links
@@ -222,8 +222,6 @@ app.get("/urls/:shortURL", (req, res) => {
       }
   
 });
-
-  
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
